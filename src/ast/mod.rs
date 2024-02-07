@@ -2328,6 +2328,18 @@ pub enum Statement {
     /// ```
     /// Note: this is a MySQL-specific statement. See <https://dev.mysql.com/doc/refman/8.0/en/lock-tables.html>
     UnlockTables,
+
+    /// ```sql
+    /// SELECT AS STRUCT
+    /// ```
+    /// Note: this is a BigQuery-specific statement. See <https://cloud.google.com/bigquery/docs/reference/standard-sql/query-syntax#select_as_struct>
+    SelectAsStruct { select_list: Vec<SelectItem> },
+
+    /// ```sql
+    /// SELECT AS VALUE
+    /// ```
+    /// Note: this is a BigQuery-specific statement. See <https://cloud.google.com/bigquery/docs/reference/standard-sql/query-syntax#select_as_value>
+    SelectAsValue { select_list: Vec<SelectItem> },
 }
 
 impl fmt::Display for Statement {
@@ -3871,6 +3883,14 @@ impl fmt::Display for Statement {
             }
             Statement::UnlockTables => {
                 write!(f, "UNLOCK TABLES")
+            }
+
+            Statement::SelectAsStruct { select_list } => {
+                write!(f, "SELECT AS STRUCT {}", display_comma_separated(select_list))
+            }
+
+            Statement::SelectAsValue { select_list } => {
+                write!(f, "SELECT AS STRUCT {}", display_comma_separated(select_list))
             }
         }
     }

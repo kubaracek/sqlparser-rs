@@ -460,6 +460,14 @@ fn parse_typeless_struct_syntax() {
 }
 
 #[test]
+fn parse_select_as_struct_syntax() {
+    // syntax: SELECT AS STRUCT 1 a, 2 b
+    let sql = r#"SELECT AS STRUCT 1 a, 2 b"#;
+    let select = bigquery().verified_only_select(sql);
+    assert_eq!(1, select.projection.len());
+}
+
+#[test]
 fn parse_typed_struct_syntax() {
     // typed struct syntax https://cloud.google.com/bigquery/docs/reference/standard-sql/data-types#typed_struct_syntax
     // syntax: STRUCT<[field_name] field_type, ...>( expr1 [, ... ])
